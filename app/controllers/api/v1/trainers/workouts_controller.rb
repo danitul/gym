@@ -37,8 +37,18 @@ class Api::V1::Trainers::WorkoutsController < ApplicationController
     end
   end
 
-  def delete
-
+  def destroy
+    @workout = Workout.find_by(id: params[:id])
+    if @workout
+      if @workout.trainer_id == params[:trainer_id].to_i
+        @workout.destroy
+        render json: {}, status: :no_content
+      else
+        render json: { errors: "Workout with id #{params[:id]} is not owned by current trainer"}, status: 422
+      end
+    else
+      render json: { errors: "Workout with id #{params[:id]} was not found"}, status: 404
+    end
   end
 
   def create_params

@@ -39,6 +39,39 @@ class Api::V1::Trainers::WorkoutsControllerTest < ActionDispatch::IntegrationTes
       end
     end
 
+    describe 'destroy' do
+      let (:workout) { create(:workout, trainer: trainer, exercises: [exercise1, exercise2]) }
+      let (:another_trainer) { create(:trainer) }
+      let (:another_workout) { create(:workout, trainer: another_trainer, exercises: [exercise1]) }
+
+      it 'should successfully destroy the specific workout' do
+        delete "/#{trainer_url}/#{workout.id}"
+
+        assert_response :no_content
+        assert_equal "", @response.body
+      end
+
+      it 'should return error if workout is not owned by current trainer' do
+        delete "/#{trainer_url}/-1"
+
+        json = JSON.parse(@response.body)
+        assert_response 404
+
+        expected_response = "Workout with id -1 was not found"
+        assert_equal expected_response, json['errors']
+      end
+
+      it 'should return not found error if workout not found' do
+        delete "/#{trainer_url}/#{another_workout.id}"
+
+        json = JSON.parse(@response.body)
+        assert_response 422
+
+        expected_response = "Workout with id #{another_workout.id} is not owned by current trainer"
+        assert_equal expected_response, json['errors']
+      end
+    end
+
     describe 'create new workout' do
       before do
         @params = {
