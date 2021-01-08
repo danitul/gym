@@ -5,8 +5,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :trainers, only: [] do
         resources :workouts, only: [:show, :create, :update, :destroy], controller: 'trainers/workouts'
-        resources :trainees, only: [:index, :update] do
-          post 'assign/:workout_id', to: 'trainees#update'
+        resources :trainees, only: [:index], controller: 'trainers/trainees' do
+          post 'assign/:workout_id', to: 'trainers/trainees#update'
         end
       end
       resources :trainees, only: [] do

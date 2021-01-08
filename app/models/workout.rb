@@ -32,8 +32,6 @@ class Workout < ApplicationRecord
   def update_with_exercises(params)
     self.exercises = []
     self.update(name: params[:name], state: params[:state], exercises_attributes: params[:exercises])
-    #self.add_creator
-    #self.add_duration
     self.save
   end
 end
