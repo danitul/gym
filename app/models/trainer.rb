@@ -7,4 +7,8 @@ class Trainer < ApplicationRecord
 
   validates :first_name, :last_name, :expertise, presence: true
   validates :expertise, inclusion: { in: EXPERTISE, message: "%{value} is not a valid expertise" }
+
+  def full_name
+    "#{self.first_name} #{self.last_name}"
+  end
 end

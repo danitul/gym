@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :trainers, only: [] do
-        resources :workouts, only: [:show, :create, :update, :destroy]
+        resources :workouts, only: [:show, :create, :update, :destroy], controller: 'trainers/workouts'
         resources :trainees, only: [:index, :update] do
           post 'assign/:workout_id', to: 'trainees#update'
         end
