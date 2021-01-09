@@ -42,5 +42,66 @@ class Api::V1::Trainers::TraineesControllerTest < ActionDispatch::IntegrationTes
       end
     end
 
+    describe 'assign workout to trainee' do
+      let (:trainee) { create(:trainee) }
+      let (:workout) { create(:workout, trainer: trainer, exercises: [exercise1, exercise2]) }
+
+      it 'should update an existing workout successfully' do
+        put "#{trainer_url}/#{trainee.id}/assign/#{workout.id}", params: {}
+
+        assert_response 200
+        json = JSON.parse(@response.body)
+        trainee.reload
+
+        assert_equal json['id'], trainee.id
+        assert_equal 1, trainee.workouts.count
+        assert_equal workout.id, trainee.workouts.first.id
+        assert_equal trainer.id, trainee.trainers.first.id
+      end
+
+      it 'should return errors if trainee does not exist' do
+        put "#{trainer_url}/-1/assign/#{workout.id}", params: {}
+
+        json = JSON.parse(@response.body)
+        assert_response 404
+
+        expected_response = "Trainee with id -1 was not found"
+        assert_equal expected_response, json['errors'].first
+      end
+
+      it 'should return errors if workout does not exist' do
+        put "#{trainer_url}/#{trainee.id}/assign/-1", params: {}
+
+        json = JSON.parse(@response.body)
+        assert_response 404
+
+        expected_response = "Workout with id -1 was not found"
+        assert_equal expected_response, json['errors'].first
+      end
+
+      it 'should return errors if workout is not published' do
+        workout.draft!
+        put "#{trainer_url}/#{trainee.id}/assign/#{workout.id}", params: {}
+
+        json = JSON.parse(@response.body)
+        assert_response 422
+
+        expected_response = "Workout with id #{workout.id} is not yet published"
+        assert_equal expected_response, json['errors'].first
+      end
+
+      it 'should return errors if workout is from a different trainer' do
+        another_trainer = create(:trainer)
+        another_workout = create(:workout, trainer: another_trainer, exercises: [exercise1, exercise2])
+        put "#{trainer_url}/#{trainee.id}/assign/#{another_workout.id}", params: {}
+
+        json = JSON.parse(@response.body)
+        assert_response 422
+
+        expected_response = "Workout with id #{another_workout.id} is not from the current trainer"
+        assert_equal expected_response, json['errors'].first
+      end
+    end
+
   end
 end

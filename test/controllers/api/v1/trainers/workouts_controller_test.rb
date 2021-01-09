@@ -130,8 +130,6 @@ class Api::V1::Trainers::WorkoutsControllerTest < ActionDispatch::IntegrationTes
     end
 
     describe 'update existing workout' do
-      #let (:workout) { create(:workout, trainer: trainer, exercises: [exercise1, exercise2]) }
-
       before do
         @params = {
           name: "Updated workout",

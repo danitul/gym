@@ -7,7 +7,6 @@ class Api::V1::Trainers::WorkoutsController < ApplicationController
     else
       render json: { errors: "Workout with id #{params[:id]} was not found"}, status: 404
     end
-
   end
 
   def create

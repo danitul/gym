@@ -12,13 +12,18 @@ class Workout < ApplicationRecord
 
   before_create :add_creator
   before_save :add_duration
-
+  
   def add_creator
     self.creator = self.trainer.full_name
   end
 
   def add_duration
     self.duration = self.exercises.map(&:duration).sum
+  end
+
+  # check if the workout is assignable by the current trainer
+  def is_assignable?(current_trainer_id)
+    self.published? && self.trainer_id == current_trainer_id
   end
 
   def self.create_with_exercises(params, trainer_id)
@@ -32,6 +37,5 @@ class Workout < ApplicationRecord
   def update_with_exercises(params)
     self.exercises = []
     self.update(name: params[:name], state: params[:state], exercises_attributes: params[:exercises])
-    self.save
   end
 end
