@@ -6,13 +6,12 @@ Rails.application.routes.draw do
       resources :trainers, only: [] do
         resources :workouts, only: [:show, :create, :update, :destroy], controller: 'trainers/workouts'
         resources :trainees, only: [:index], controller: 'trainers/trainees' do
-          post 'assign/:workout_id', to: 'trainers/trainees#update'
+          put 'assign/:workout_id', to: 'trainers/trainees#update'
         end
       end
       resources :trainees, only: [] do
-        resources :workouts, only: [:index] do
-          post 'choose/:trainer_id', to: 'workouts#update'
-        end
+        resources :workouts, only: [:index], controller: 'trainees/workouts'
+        resources :trainers, only: [:index], controller: 'trainees/trainers'
       end
     end
   end

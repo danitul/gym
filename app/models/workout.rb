@@ -12,7 +12,11 @@ class Workout < ApplicationRecord
 
   before_create :add_creator
   before_save :add_duration
-  
+
+  # using created_at here for speed while awaiting clarification,
+  # but should probably be smth more fine grained such as the time when the workout was last done by the trainee
+  scope :within_timeframe, -> (start_date, end_date) { where('created_at >= ? AND created_at <= ?', start_date, end_date) }
+
   def add_creator
     self.creator = self.trainer.full_name
   end
