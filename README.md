@@ -63,7 +63,7 @@ Trainee
 
 In a ready for production application I would take into consideration authorization and authentication as well,
 but since requirements didn't specify it and already looked like it's already gonna take
-a considerable amount of time I decided to leave it out for now and use the modelling given above for the four entities.
+a considerable amount of time I decided to leave it out for now and use the modeling given above for the four entities.
 
 I'm used to using devise so that would have been my option for authentication. 
 That would have meant having a User model with multiple profiles and roles. 
@@ -80,8 +80,16 @@ provided as a CSV file. I also skipped this part since it was not directly impac
 and used the factory bot factories to generate them for testing purposes. Of course, if the goal was to see
 how I can read out of a CSV file I could still implement that.
 
-### Logging, Caching
+### Logging, Serializers, Caching
+I set myself a limit of how much I can do within 8 hours
+with a focus on data validation, error handling and testing.
+That means some important production ready concerns are not included,
+although can add them if you would like to evaluate that as well.
+
 There is no logging which is really important for a production ready code.
+
+Also, for production ready code I'd use serializers for controller action responses.
+
 There is also no caching of controller actions, but at this stage with 0 users so far
 would not be a main concern along with other optimizations that come with having a growing user base.
 
