@@ -1,4 +1,8 @@
+# Here Trainees have access to actions related to Workouts
 class Api::V1::Trainees::WorkoutsController < ApplicationController
+  # returns all the Trainee's workouts based on a filter
+  # We only have one now, but this would need some refactoring
+  # once we have a need for more such filters.
   def index
     @trainee = Trainee.find_by(id: params[:trainee_id])
     if !@trainee.nil?

@@ -1,3 +1,4 @@
+# Here Trainers have access to actions related to Workouts
 class Api::V1::Trainers::WorkoutsController < ApplicationController
   def show
     @workout = Workout.find_by(id: params[:id])

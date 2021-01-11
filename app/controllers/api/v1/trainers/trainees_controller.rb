@@ -1,3 +1,4 @@
+# Here Trainers have access to actions related to Trainees
 class Api::V1::Trainers::TraineesController < ApplicationController
   # using this action a trainer can see all trainees that chose to train with that trainer
   def index
