@@ -12,7 +12,11 @@ class Api::V1::Trainers::WorkoutsController < ApplicationController
 
   def create
     if create_params[:exercises] && create_params[:exercises].size > 0
-      @workout = Workout.create_with_exercises(create_params, params[:trainer_id])
+      @workout = Workout.new(
+        name: create_params[:name],
+        exercises_attributes: create_params[:exercises],
+        trainer_id: params[:trainer_id]
+      )
       if @workout.save
         render json: @workout, status: 201
       else

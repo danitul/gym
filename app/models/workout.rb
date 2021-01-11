@@ -8,7 +8,7 @@ class Workout < ApplicationRecord
   has_and_belongs_to_many :exercises
   accepts_nested_attributes_for :exercises
 
-  validates :name, :creator, :duration, :state, :exercises, presence: true
+  validates :name, :state, :exercises, presence: true
 
   before_create :add_creator
   before_save :add_duration
@@ -30,16 +30,9 @@ class Workout < ApplicationRecord
     self.published? && self.trainer_id == current_trainer_id
   end
 
-  def self.create_with_exercises(params, trainer_id)
-    trainer = Trainer.find_by(id: trainer_id)
-    workout = Workout.new(name: params[:name], exercises_attributes: params[:exercises], trainer: trainer)
-    workout.add_creator
-    workout.add_duration
-    workout
-  end
-
+  # we reset all exercises before adding all the current ones again.
   def update_with_exercises(params)
     self.exercises = []
-    self.update(name: params[:name], state: params[:state], exercises_attributes: params[:exercises])
+    self.assign_attributes(name: params[:name], state: params[:state], exercises_attributes: params[:exercises])
   end
 end

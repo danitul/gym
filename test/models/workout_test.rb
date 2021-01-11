@@ -33,12 +33,6 @@ class WorkoutTest < ActiveSupport::TestCase
         end
       end
 
-      it "does not create a trainer with no duration given" do
-        assert_raises ActiveRecord::RecordInvalid do
-          create(:workout, trainer: trainer, exercises: [exercise1, exercise2], duration: nil)
-        end
-      end
-
       it "does not create a workout with no trainer given" do
         assert_raises ActiveRecord::RecordInvalid do
           create(:workout, trainer: nil, exercises: [exercise1, exercise2])
